@@ -5,6 +5,7 @@ from pygame.locals import *
 import recursos
 import fisica
 import sonido
+import math
 
 # Inicialización de Pygame
 pygame.init()
@@ -134,11 +135,36 @@ class Moneda(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         # Usar imagen de recursos
-        self.image = recursos.imagenes["moneda.png"]
+        self.original_image = recursos.imagenes["moneda.png"]
+        # Ajustar el tamaño de la moneda si es necesario
+        if self.original_image.get_width() > 30 or self.original_image.get_height() > 30:
+            self.original_image = pygame.transform.scale(self.original_image, (30, 30))
+        self.image = self.original_image.copy()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.valor = 10
+        # Añadir animación
+        self.contador = 0
+        self.velocidad_animacion = 0.1
+        self.tamaño_original = self.original_image.get_width()
+
+    def update(self):
+        # Animación simple: hacer que la moneda "gire" (cambio de escala)
+        self.contador += self.velocidad_animacion
+        factor_escala = 0.9 + 0.2 * abs(math.sin(self.contador))
+        nuevo_ancho = int(self.tamaño_original * factor_escala)
+        nuevo_alto = int(self.tamaño_original * factor_escala)
+        
+        # Mantener la posición centrada
+        pos_x = self.rect.centerx
+        pos_y = self.rect.centery
+        
+        # Crear una nueva imagen escalada a partir de la original
+        self.image = pygame.transform.scale(self.original_image, (nuevo_ancho, nuevo_alto))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = pos_x
+        self.rect.centery = pos_y
 
 # Clase para gestionar niveles
 class Nivel:
@@ -499,6 +525,7 @@ def main():
             # Actualizar sprites
             todos_los_sprites.update()
             nivel_actual.enemigos.update()
+            nivel_actual.monedas.update()  # Actualizar monedas para animación
             
             # Actualizar tiempo
             nivel_actual.actualizar_tiempo()

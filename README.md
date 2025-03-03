@@ -21,3 +21,6 @@ SuperNick es un juego de plataformas donde controlas a Nick, un personaje que de
 - Límite de tiempo para cada escenario
 - Sistema de vidas
 - Diferentes tipos de obstáculos y enemigos
+
+## Iconos
+<a href="https://www.flaticon.es/iconos-gratis/moneda" title="moneda iconos">Moneda iconos creados por NajmunNahar - Flaticon</a>
