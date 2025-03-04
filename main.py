@@ -104,9 +104,19 @@ class Plataforma(pygame.sprite.Sprite):
     def __init__(self, x, y, ancho, alto):
         super().__init__()
         # Usar imagen de recursos
-        self.image = recursos.imagenes["plataforma.png"]
+        self.original_image = recursos.imagenes["plataforma.png"]
+        
+        # Información de depuración
+        print(f"DEBUG - Plataforma creada:")
+        print(f"  - Tamaño original: {self.original_image.get_width()}x{self.original_image.get_height()}")
+        print(f"  - Tamaño deseado: {ancho}x{alto}")
+        
         # Escalar la imagen al tamaño deseado
-        self.image = pygame.transform.scale(self.image, (ancho, alto))
+        self.image = pygame.transform.scale(self.original_image, (ancho, alto))
+        
+        # Más información de depuración
+        print(f"  - Tamaño final: {self.image.get_width()}x{self.image.get_height()}")
+        
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -116,7 +126,9 @@ class Enemigo(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         # Usar imagen de recursos
-        self.image = recursos.imagenes["enemigo.png"]
+        self.original_image = recursos.imagenes["enemigo.png"]
+        # Ajustar el tamaño del enemigo a un tamaño adecuado (30x30 píxeles)
+        self.image = pygame.transform.scale(self.original_image, (30, 30))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -183,17 +195,23 @@ class Nivel:
         
     def configurar_nivel(self):
         # Suelo base para todos los niveles
+        print(f"DEBUG - Configurando nivel {self.numero}")
+        print(f"DEBUG - Creando suelo base")
         self.plataformas.add(Plataforma(0, ALTO - 50, ANCHO, 50))
         
         if self.numero == 1:
             # Nivel 1: Fácil, pocas plataformas y enemigos
+            print(f"DEBUG - Configurando nivel 1")
+            print(f"DEBUG - Creando plataformas nivel 1")
             self.plataformas.add(Plataforma(200, 400, 100, 20))
             self.plataformas.add(Plataforma(400, 350, 100, 20))
             self.plataformas.add(Plataforma(600, 300, 100, 20))
             
+            print(f"DEBUG - Creando enemigos nivel 1")
             self.enemigos.add(Enemigo(300, ALTO - 80))
             self.enemigos.add(Enemigo(500, ALTO - 80))
             
+            print(f"DEBUG - Creando monedas nivel 1")
             for i in range(5):
                 self.monedas.add(Moneda(150 + i * 100, 350))
                 
@@ -247,8 +265,15 @@ class Nivel:
             self.ultimo_tiempo = tiempo_actual
             
     def dibujar(self, pantalla):
-        # Dibujar fondo
-        pantalla.fill(AZUL_CIELO)
+        # Dibujar fondo según el nivel
+        nombre_fondo = f"fondo_nivel{self.numero}.png"
+        if nombre_fondo in recursos.imagenes:
+            # Usar la imagen de fondo si existe
+            fondo = recursos.imagenes[nombre_fondo]
+            pantalla.blit(fondo, (0, 0))
+        else:
+            # Si no existe, usar color de fondo predeterminado
+            pantalla.fill(AZUL_CIELO)
         
         # Dibujar elementos del nivel
         self.plataformas.draw(pantalla)
@@ -440,11 +465,13 @@ class Victoria:
 # Función principal del juego
 def main():
     # Inicializar objetos del juego
+    print("DEBUG - Iniciando juego")
     nick = Nick()
     todos_los_sprites = pygame.sprite.Group()
     todos_los_sprites.add(nick)
     
     # Inicializar menús
+    print("DEBUG - Inicializando menús")
     menu_principal = Menu()
     seleccion_nivel = SeleccionNivel()
     game_over = GameOver()
@@ -454,6 +481,7 @@ def main():
     estado_actual = MENU
     nivel_actual = None
     nivel_numero = 1
+    print(f"DEBUG - Estado inicial: {estado_actual} (MENU={MENU}, JUGANDO={JUGANDO})")
     
     # Bucle principal del juego
     ejecutando = True
@@ -464,17 +492,23 @@ def main():
         # Manejo de eventos
         for evento in pygame.event.get():
             if evento.type == QUIT:
+                print("DEBUG - Evento QUIT detectado")
                 ejecutando = False
                 
             # Manejo de eventos según el estado del juego
             if estado_actual == MENU:
                 opcion = menu_principal.manejar_eventos(evento)
                 if opcion == 0:  # Jugar
+                    print("DEBUG - Opción Jugar seleccionada")
                     estado_actual = JUGANDO
                     nivel_actual = Nivel(nivel_numero)
+                    print(f"DEBUG - Nuevo estado: {estado_actual}")
                 elif opcion == 1:  # Seleccionar Nivel
+                    print("DEBUG - Opción Seleccionar Nivel seleccionada")
                     estado_actual = SELECCION_NIVEL
+                    print(f"DEBUG - Nuevo estado: {estado_actual}")
                 elif opcion == 2:  # Salir
+                    print("DEBUG - Opción Salir seleccionada")
                     ejecutando = False
                     
             elif estado_actual == SELECCION_NIVEL:

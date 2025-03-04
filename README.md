@@ -24,3 +24,5 @@ SuperNick es un juego de plataformas donde controlas a Nick, un personaje que de
 
 ## Iconos
 <a href="https://www.flaticon.es/iconos-gratis/moneda" title="moneda iconos">Moneda iconos creados por NajmunNahar - Flaticon</a>
+<a href="https://www.flaticon.es/iconos-gratis/ladrillo" title="ladrillo iconos">Ladrillo iconos creados por Freepik - Flaticon</a>
+<a href="https://www.flaticon.es/iconos-gratis/enemigo" title="enemigo iconos">Enemigo iconos creados por Smashicons - Flaticon</a>

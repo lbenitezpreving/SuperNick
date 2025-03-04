@@ -35,7 +35,17 @@ def cargar_imagen(nombre, escala=1):
     
     try:
         ruta_completa = os.path.join(DIR_IMAGENES, nombre)
+        print(f"Intentando cargar: {ruta_completa}")
+        print(f"¿El archivo existe? {os.path.exists(ruta_completa)}")
+        
         imagen = pygame.image.load(ruta_completa).convert_alpha()
+        
+        # Imprimir información de depuración para plataforma.png y enemigo.png
+        if nombre == "plataforma.png" or nombre == "enemigo.png":
+            print(f"DEBUG - {nombre} cargada:")
+            print(f"  - Tamaño: {imagen.get_width()}x{imagen.get_height()}")
+            print(f"  - Tiene canal alpha: {imagen.get_alpha() is not None}")
+            print(f"  - Ruta: {ruta_completa}")
         
         if escala != 1:
             ancho_original = imagen.get_width()
@@ -96,15 +106,17 @@ def crear_imagenes_temporales():
     imagenes["nick_derecha.png"] = nick_img
     imagenes["nick_salto.png"] = nick_img
     
-    # Plataforma
-    plataforma_img = pygame.Surface((100, 20))
-    plataforma_img.fill((0, 255, 0))  # Verde
-    imagenes["plataforma.png"] = plataforma_img
+    # Plataforma - solo crear si no existe
+    if "plataforma.png" not in imagenes:
+        plataforma_img = pygame.Surface((100, 20))
+        plataforma_img.fill((0, 255, 0))  # Verde
+        imagenes["plataforma.png"] = plataforma_img
     
-    # Enemigo
-    enemigo_img = pygame.Surface((30, 30))
-    enemigo_img.fill((255, 0, 255))  # Magenta
-    imagenes["enemigo.png"] = enemigo_img
+    # Enemigo - solo crear si no existe
+    if "enemigo.png" not in imagenes:
+        enemigo_img = pygame.Surface((30, 30))
+        enemigo_img.fill((255, 0, 255))  # Magenta
+        imagenes["enemigo.png"] = enemigo_img
     
     # No creamos una imagen temporal para moneda.png si ya existe
     if "moneda.png" not in imagenes:
@@ -117,10 +129,14 @@ def crear_imagenes_temporales():
     # Fondos
     fondo_img = pygame.Surface((800, 600))
     fondo_img.fill((107, 140, 255))  # Azul cielo
-    imagenes["fondo_nivel1.png"] = fondo_img
-    imagenes["fondo_nivel2.png"] = fondo_img
-    imagenes["fondo_nivel3.png"] = fondo_img
-    imagenes["fondo_menu.png"] = fondo_img
+    if "fondo_nivel1.png" not in imagenes:
+        imagenes["fondo_nivel1.png"] = fondo_img
+    if "fondo_nivel2.png" not in imagenes:
+        imagenes["fondo_nivel2.png"] = fondo_img
+    if "fondo_nivel3.png" not in imagenes:
+        imagenes["fondo_nivel3.png"] = fondo_img
+    if "fondo_menu.png" not in imagenes:
+        imagenes["fondo_menu.png"] = fondo_img
 
 def verificar_imagenes_existentes():
     """Verifica qué imágenes existen en el directorio de imágenes."""
