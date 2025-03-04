@@ -25,6 +25,7 @@ IMAGENES_REQUERIDAS = [
     "fondo_nivel1.png",   # Fondo para el nivel 1
     "fondo_nivel2.png",   # Fondo para el nivel 2
     "fondo_nivel3.png",   # Fondo para el nivel 3
+    "fondo_nivel4.png",   # Fondo para el nivel 4
     "fondo_menu.png",     # Fondo para el menú
 ]
 
@@ -135,6 +136,8 @@ def crear_imagenes_temporales():
         imagenes["fondo_nivel2.png"] = fondo_img
     if "fondo_nivel3.png" not in imagenes:
         imagenes["fondo_nivel3.png"] = fondo_img
+    if "fondo_nivel4.png" not in imagenes:
+        imagenes["fondo_nivel4.png"] = fondo_img
     if "fondo_menu.png" not in imagenes:
         imagenes["fondo_menu.png"] = fondo_img
 

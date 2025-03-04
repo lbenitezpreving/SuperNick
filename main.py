@@ -255,6 +255,38 @@ class Nivel:
                 
             self.tiempo_limite = 120  # 2 minutos
         
+        elif self.numero == 4:
+            # Nivel 4: Muy difícil
+            # Plataformas más pequeñas y dispersas
+            self.plataformas.add(Plataforma(100, 500, 80, 20))
+            self.plataformas.add(Plataforma(250, 450, 80, 20))
+            self.plataformas.add(Plataforma(400, 400, 80, 20))
+            self.plataformas.add(Plataforma(550, 350, 80, 20))
+            self.plataformas.add(Plataforma(400, 300, 80, 20))
+            self.plataformas.add(Plataforma(250, 250, 80, 20))
+            self.plataformas.add(Plataforma(100, 200, 80, 20))
+            self.plataformas.add(Plataforma(250, 150, 80, 20))
+            self.plataformas.add(Plataforma(400, 100, 80, 20))
+            
+            # Más enemigos y en posiciones estratégicas
+            self.enemigos.add(Enemigo(150, ALTO - 80))
+            self.enemigos.add(Enemigo(350, ALTO - 80))
+            self.enemigos.add(Enemigo(550, ALTO - 80))
+            self.enemigos.add(Enemigo(200, 470))
+            self.enemigos.add(Enemigo(350, 370))
+            self.enemigos.add(Enemigo(500, 270))
+            self.enemigos.add(Enemigo(300, 220))
+            
+            # Monedas más dispersas y difíciles de alcanzar
+            for i in range(5):
+                self.monedas.add(Moneda(120 + i * 150, 450 - i * 80))
+            
+            for i in range(5):
+                self.monedas.add(Moneda(700 - i * 150, 100 + i * 80))
+            
+            # Tiempo más ajustado
+            self.tiempo_limite = 150  # 2.5 minutos
+        
         self.tiempo_restante = self.tiempo_limite
         self.monedas_totales = len(self.monedas)
         
@@ -354,7 +386,7 @@ class SeleccionNivel:
         self.fuente_titulo = pygame.font.Font(None, 72)
         self.fuente_opciones = pygame.font.Font(None, 48)
         self.nivel_seleccionado = 0
-        self.niveles = ["Nivel 1", "Nivel 2", "Nivel 3", "Volver"]
+        self.niveles = ["Nivel 1", "Nivel 2", "Nivel 3", "Nivel 4", "Volver"]
         
     def dibujar(self, pantalla):
         pantalla.fill(AZUL_CIELO)
@@ -513,11 +545,11 @@ def main():
                     
             elif estado_actual == SELECCION_NIVEL:
                 opcion = seleccion_nivel.manejar_eventos(evento)
-                if opcion in [0, 1, 2]:  # Niveles 1, 2, 3
+                if opcion in [0, 1, 2, 3]:  # Niveles 1, 2, 3, 4
                     estado_actual = JUGANDO
                     nivel_numero = opcion + 1
                     nivel_actual = Nivel(nivel_numero)
-                elif opcion == 3:  # Volver
+                elif opcion == 4:  # Volver
                     estado_actual = MENU
                     
             elif estado_actual == GAME_OVER:
@@ -534,7 +566,7 @@ def main():
             elif estado_actual == VICTORIA:
                 opcion = victoria.manejar_eventos(evento)
                 if opcion == 0:  # Siguiente Nivel
-                    nivel_numero = min(nivel_numero + 1, 3)
+                    nivel_numero = min(nivel_numero + 1, 4)
                     nivel_actual = Nivel(nivel_numero)
                     estado_actual = JUGANDO
                 elif opcion == 1:  # Menú Principal
